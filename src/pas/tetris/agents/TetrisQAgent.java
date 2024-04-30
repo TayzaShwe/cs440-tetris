@@ -128,7 +128,7 @@ public class TetrisQAgent
             System.exit(-1);
         }
         currentBoard = boardImage;
-        System.out.println(currentBoard); //test
+        //System.out.println(currentBoard); //test
 
         List<Integer> columnHeightsList = getColumnHeights(boardImage);
         for (int i = 0; i < columnHeightsList.size(); i++) {
@@ -154,7 +154,7 @@ public class TetrisQAgent
         //finalInputMatrix.set(0, 13, numWells);
         finalInputMatrix.set(0, 13, minColMaxColDiff);
         finalInputMatrix.set(0, 14, linesClearedWithAction);
-        System.out.println(finalInputMatrix); // test
+        //System.out.println(finalInputMatrix); // test
 
         return finalInputMatrix;
     }
