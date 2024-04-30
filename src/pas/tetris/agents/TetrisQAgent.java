@@ -131,9 +131,9 @@ public class TetrisQAgent
         //System.out.println(currentBoard); //test
 
         List<Integer> columnHeightsList = getColumnHeights(boardImage);
-        for (int i = 0; i < columnHeightsList.size(); i++) {
-            finalInputMatrix.set(0, i, columnHeightsList.get(i));
-        }
+        // for (int i = 0; i < columnHeightsList.size(); i++) {
+        //     finalInputMatrix.set(0, i, columnHeightsList.get(i));
+        // }
 
         aggregateHeight = columnHeightsList.stream().mapToInt(Integer::intValue).sum();
         
