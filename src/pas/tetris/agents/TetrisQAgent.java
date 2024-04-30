@@ -36,7 +36,7 @@ public class TetrisQAgent
     public static final int BOARD_WIDTH = 10;
     public static final int SHOULD_EXPLORE_SAMPLE_SIZE = 20;
     public static final int SHOULD_EXPLORE_MIN_MAX_MOVES_DIFF_THRESHOLD = 10;
-    public static final int INPUT_MATRIX_LENGTH = 15;
+    public static final int INPUT_MATRIX_LENGTH = 15-10;
 
     private Random random;
     private Matrix currentBoard = null;
@@ -148,12 +148,12 @@ public class TetrisQAgent
         numWells = getNumberOfWells(boardImage);
         linesClearedWithAction = getLinesClearedWithAction(boardImage);
         
-        finalInputMatrix.set(0, 10, aggregateHeight);
-        finalInputMatrix.set(0, 11, maxHeight);
-        finalInputMatrix.set(0, 12, numHoles);
+        finalInputMatrix.set(0, 0, aggregateHeight);
+        finalInputMatrix.set(0, 1, maxHeight);
+        finalInputMatrix.set(0, 2, numHoles);
         //finalInputMatrix.set(0, 13, numWells);
-        finalInputMatrix.set(0, 13, minColMaxColDiff);
-        finalInputMatrix.set(0, 14, linesClearedWithAction);
+        finalInputMatrix.set(0, 3, minColMaxColDiff);
+        finalInputMatrix.set(0, 4, linesClearedWithAction);
         //System.out.println(finalInputMatrix); // test
 
         return finalInputMatrix;
