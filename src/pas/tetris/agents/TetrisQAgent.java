@@ -36,7 +36,7 @@ public class TetrisQAgent
     public static final int BOARD_WIDTH = 10;
     public static final int SHOULD_EXPLORE_SAMPLE_SIZE = 20;
     public static final int SHOULD_EXPLORE_MIN_MAX_MOVES_DIFF_THRESHOLD = 10;
-    public static final int INPUT_MATRIX_LENGTH = 14;
+    public static final int INPUT_MATRIX_LENGTH = 15;
 
     private Random random;
     private Matrix currentBoard = null;
@@ -45,6 +45,8 @@ public class TetrisQAgent
     private int minColMaxColDiff = 0;
     private int aggregateHeight = 0;
     private int maxHeight = 0;
+    private int linesClearedWithAction = 0;
+
     private long minMoves = Integer.MAX_VALUE;
     private long maxMoves = Integer.MIN_VALUE;
     private long prevMoveIdx = 0;
@@ -126,6 +128,7 @@ public class TetrisQAgent
             System.exit(-1);
         }
         currentBoard = boardImage;
+        System.out.println(currentBoard); //test
 
         List<Integer> columnHeightsList = getColumnHeights(boardImage);
         for (int i = 0; i < columnHeightsList.size(); i++) {
@@ -143,13 +146,15 @@ public class TetrisQAgent
         minColMaxColDiff = maxHeight - minColumnHeight;
         numHoles = getNumberOfHoles(boardImage);
         numWells = getNumberOfWells(boardImage);
+        linesClearedWithAction = getLinesClearedWithAction(boardImage);
         
         finalInputMatrix.set(0, 10, aggregateHeight);
         finalInputMatrix.set(0, 11, maxHeight);
         finalInputMatrix.set(0, 12, numHoles);
         //finalInputMatrix.set(0, 13, numWells);
         finalInputMatrix.set(0, 13, minColMaxColDiff);
-        //System.out.println(finalInputMatrix); // test
+        finalInputMatrix.set(0, 14, linesClearedWithAction);
+        System.out.println(finalInputMatrix); // test
 
         return finalInputMatrix;
     }
@@ -201,6 +206,30 @@ public class TetrisQAgent
             }
         }
         return numberOfWells;
+    }
+
+    public int getLinesClearedWithAction(Matrix board) {
+        // go through each row, if a 1.0 is found, check if the entire row is occupied. if so ++
+        int numLinesCleared = 0;
+        for (int row = 0; row < BOARD_HEIGHT; row++) {
+            for (int col = 0; col < BOARD_WIDTH; col++) {
+                double cell = board.get(row, col);
+                if (cell == 1.0) { // cell being considered
+                    boolean isFullLine = true;
+                    for (int col1 = 0; col1 < BOARD_WIDTH; col1++) {
+                        double cell1 = board.get(row, col1);
+                        if (cell1 == 0.0) {
+                            isFullLine = false;
+                            break;
+                        }
+                    } 
+                    if (isFullLine) {
+                        numLinesCleared++;
+                    }
+                }
+            }
+        }
+        return numLinesCleared;
     }
 
     /**
@@ -337,7 +366,7 @@ public class TetrisQAgent
         // punish large diff between min col and max col
         // punish large aggregate height
         // punish max height    
-        double finalReward = 10*game.getScoreThisTurn() - 5*numHoles - 2*minColMaxColDiff - 3*aggregateHeight - 3*maxHeight;
+        double finalReward = 0.7*game.getScoreThisTurn() - 0.1*numHoles - 0.05*minColMaxColDiff - 0.1*aggregateHeight - 0.05*maxHeight;
         return finalReward;
     }
 
